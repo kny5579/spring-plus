@@ -7,6 +7,7 @@ import org.example.expert.domain.common.exception.InvalidRequestException;
 import org.example.expert.domain.todo.dto.request.TodoSaveRequest;
 import org.example.expert.domain.todo.dto.response.TodoResponse;
 import org.example.expert.domain.todo.dto.response.TodoSaveResponse;
+import org.example.expert.domain.todo.dto.response.TodoSearchResponse;
 import org.example.expert.domain.todo.entity.Todo;
 import org.example.expert.domain.todo.repository.TodoRepository;
 import org.example.expert.domain.user.dto.response.UserResponse;
@@ -53,10 +54,9 @@ public class TodoService {
 
     public Page<TodoResponse> getTodos(int page, int size, String weather, LocalDate startDate, LocalDate endDate) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        LocalDateTime startDateTime = startDate.atStartOfDay();
         LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
 
-        Page<Todo> todos = todoRepository.findAllByWeatherAndModifiedAtBetween(pageable, weather, startDateTime, endDateTime);
+        Page<Todo> todos = todoRepository.findAllByWeatherAndModifiedAtBetween(pageable, weather, getStartDateTime(startDate), endDateTime);
 
         return todos.map(todo -> new TodoResponse(
                 todo.getId(),
@@ -84,5 +84,25 @@ public class TodoService {
                 todo.getCreatedAt(),
                 todo.getModifiedAt()
         );
+    }
+
+    public Page<TodoSearchResponse> searchTodos(int page,
+                                                int size,
+                                                String title,
+                                                String nickname,
+                                                LocalDate startDate,
+                                                LocalDate endDate) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
+        getStartDateTime(startDate);
+
+        return todoRepository.searchByTitleAndNicknameAndCreatedAtBetween(pageable, title, nickname, getStartDateTime(startDate), endDateTime);
+    }
+
+    private LocalDateTime getStartDateTime(LocalDate startDate) {
+        if(startDate.isBefore(LocalDate.of(1900, 1,1))) {
+            throw new InvalidRequestException("해당 일자의 일정은 검색할 수 없습니다.");
+        }
+        return startDate.atStartOfDay();
     }
 }
