@@ -17,9 +17,9 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
             "AND t.modifiedAt BETWEEN :startDateTime AND :endDateTime " +
             "ORDER BY t.modifiedAt DESC")
     Page<Todo> findAllByWeatherAndModifiedAtBetween(Pageable pageable,
-                                              String weather,
-                                              LocalDateTime startDateTime,
-                                              LocalDateTime endDateTime);
+                                                    @Param("weather") String weather,
+                                                    @Param("startDateTime") LocalDateTime startDateTime,
+                                                    @Param("endDateTime") LocalDateTime endDateTime);
 
     @Query("SELECT t FROM Todo t " +
             "LEFT JOIN t.user " +
