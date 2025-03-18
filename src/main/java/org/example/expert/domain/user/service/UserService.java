@@ -30,6 +30,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -49,6 +50,12 @@ public class UserService {
     public UserResponse getUser(long userId) {
         User user = getUserById(userId);
         return new UserResponse(user.getId(), user.getEmail(), user.getNickname());
+    }
+
+    public List<UserResponse> getUsers(String nickname) {
+        List<User> userList = userRepository.findByNickname(nickname);
+        return userList.stream()
+                .map(user -> new UserResponse(user.getId(), user.getEmail(), user.getNickname())).toList();
     }
 
     @Transactional
