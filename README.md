@@ -68,7 +68,7 @@
 
 ## 13. 대용량 데이터 처리
 
-![data_1.png](readmeImg/data_1.png)
+![data_3.png](readmeImg/data_1.png)
 > 유저 데이터 100만 건 생성 결과
 
 <br>
