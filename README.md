@@ -70,3 +70,32 @@
 
 ![data_1.png](readmeImg/data_1.png)
 > 유저 데이터 100만 건 생성 결과
+
+<br>
+
+### 데이터 검색 속도 비교
+
+| **방법**                                     | **시간(ms)** | **개선 비율**    |
+|--------------------------------------------|-------------|----------------|
+| 1. JPA 쿼리 메서드 사용                     | 540ms       | -              |
+| 2. nickname 인덱스 사용                     | 11ms        | 97.96% 개선    |
+| 3. nickname 인덱스 + JPQL로 UserResponse 조회 | 8ms         | 98.52% 개선    |
+
+<br>
+
+![data_2.png](readmeImg/data_2.png)
+#### 1. jpa 쿼리메서드 사용 -> 540ms
+
+<br>
+
+![data_3.png](readmeImg/data_3.png)
+#### 2. nickname 인덱스 사용 -> 11ms <br>
+`CREATE INDEX idx_nickname ON users(nickname);`
+
+<br>
+
+![data_4.png](readmeImg/data_4.png)
+#### 3. nickname 인덱스 사용 + db에서 UserResponse를 바로 조회하는 JPQL 쿼리로 변경 -> 8ms
+`@Query("SELECT new org.example.expert.domain.user.dto.response.UserResponse(u.id, u.email, u.nickname)" +` <br>
+`"FROM User u WHERE u.nickname = :nickname")` <br>
+`List<UserResponse> findByNickname(@Param("nickname") String nickname);`
