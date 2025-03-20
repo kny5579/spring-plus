@@ -3,12 +3,9 @@ package org.example.expert.domain.user.service;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.util.IOUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.expert.domain.common.exception.InvalidRequestException;
@@ -23,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -81,7 +77,7 @@ public class UserService {
 
         userRepository.save(user);
 
-        return new UpdateProfileImageResponse(userId,profileImageFileUrl);
+        return new UpdateProfileImageResponse(userId, profileImageFileUrl);
     }
 
     @Transactional
@@ -92,7 +88,7 @@ public class UserService {
 
         // s3에 저장된 이미지 삭제
         String key = getKeyFromProfileImageUrl(profileImageUrl);
-        amazonS3.deleteObject(new DeleteObjectRequest(bucketName,key));
+        amazonS3.deleteObject(new DeleteObjectRequest(bucketName, key));
 
         user.deleteProfileImage();
 
@@ -105,7 +101,7 @@ public class UserService {
 
     private String uploadImageToS3(MultipartFile image) throws IOException {
         String originalFilename = image.getOriginalFilename(); //원본 파일 명
-        String s3FileName = "image/"+UUID.randomUUID()+"_" + originalFilename; //변경된 파일 명
+        String s3FileName = "image/" + UUID.randomUUID() + "_" + originalFilename; //변경된 파일 명
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(image.getContentType());
@@ -125,7 +121,7 @@ public class UserService {
 
     private String getKeyFromProfileImageUrl(String imageUrl) throws MalformedURLException, UnsupportedEncodingException {
         URL url = new URL(imageUrl);
-        String decodingKey = URLDecoder.decode(url.getPath(),"UTF-8");
+        String decodingKey = URLDecoder.decode(url.getPath(), "UTF-8");
         return decodingKey.substring(1);
     }
 

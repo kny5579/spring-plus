@@ -11,6 +11,7 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
+
     @Query("SELECT new org.example.expert.domain.user.dto.response.UserResponse(u.id, u.email, u.nickname)" +
             "FROM User u WHERE u.nickname = :nickname")
     List<UserResponse> findByNickname(@Param("nickname") String nickname);

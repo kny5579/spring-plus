@@ -13,7 +13,8 @@ import org.example.expert.domain.user.enums.UserRole;
 @Table(name = "users")
 public class User extends Timestamped {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true)
     private String email;
@@ -51,7 +52,11 @@ public class User extends Timestamped {
         this.userRole = userRole;
     }
 
-    public void updateProfileImage(String profileImage) { this.profileImage = profileImage; }
+    public void updateProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
 
-    public void deleteProfileImage() { this.profileImage = "default"; }
+    public void deleteProfileImage() {
+        this.profileImage = "default";
+    }
 }

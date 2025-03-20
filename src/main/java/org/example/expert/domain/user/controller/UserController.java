@@ -40,7 +40,7 @@ public class UserController {
     @PutMapping("/users/image")
     public ResponseEntity<UpdateProfileImageResponse> updateProfileImage(
             @AuthenticationPrincipal AuthUser authUser, @RequestPart(value = "image") MultipartFile image) throws IOException {
-        return ResponseEntity.ok(userService.updateProfileImage(authUser.getId(),image));
+        return ResponseEntity.ok(userService.updateProfileImage(authUser.getId(), image));
     }
 
     @DeleteMapping("/users/image")

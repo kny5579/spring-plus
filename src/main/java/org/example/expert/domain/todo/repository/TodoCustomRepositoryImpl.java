@@ -1,9 +1,6 @@
 package org.example.expert.domain.todo.repository;
 
-import com.querydsl.core.types.ExpressionUtils;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AllArgsConstructor;
 import org.example.expert.domain.todo.dto.response.QTodoSearchResponse;
@@ -44,10 +41,10 @@ public class TodoCustomRepositoryImpl implements TodoCustomRepository {
         List<TodoSearchResponse> searchList = jpaQueryFactory
                 .select(
                         new QTodoSearchResponse(
-                        todo.id,
-                        todo.title,
-                        todo.managers.size(),
-                        todo.comments.size())
+                                todo.id,
+                                todo.title,
+                                todo.managers.size(),
+                                todo.comments.size())
                 )
                 .from(todo)
                 .leftJoin(todo.managers)

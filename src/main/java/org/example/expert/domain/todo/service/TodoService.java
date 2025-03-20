@@ -100,7 +100,7 @@ public class TodoService {
     }
 
     private LocalDateTime getStartDateTime(LocalDate startDate) {
-        if(startDate.isBefore(LocalDate.of(1900, 1,1))) {
+        if (startDate.isBefore(LocalDate.of(1900, 1, 1))) {
             throw new InvalidRequestException("해당 일자의 일정은 검색할 수 없습니다.");
         }
         return startDate.atStartOfDay();
